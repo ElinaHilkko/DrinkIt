@@ -1,61 +1,94 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Alert, FlatList, StyleSheet, Text, TextInput, View, Keyboard } from 'react-native';
-import { Button, Input, ListItem } from'react-native-elements';
+import { Alert, FlatList, Image, StyleSheet, Text, TextInput, View, Keyboard } from 'react-native';
+import { Button, ListItem } from'react-native-elements';
 
-export default function SearchScreen() {
-  const [cocktail, setCocktail] = useState(); 
+export default function SearchScreen({ navigation }) {
+  const [name, setName] = useState(); 
   const [ingredient, setIngredient] = useState('');
-  //const [cocktails, setCocktails] = useState([]); //LISTA
+  const [drinks, setDrinks] = useState([]);
 
-  const findCocktailByName = async () => {
-    const url = `www.thecocktaildb.com/api/json/v1/1/search.php?s=${cocktail}`;
-
+  const findByName = async () => {
+    const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`;
     try {
-        const response = await fetch(url);
-        const data = await response.json();
+      const response = await fetch(url);
+      const data = await response.json();
+      setDrinks(data.drinks);
     } catch (error) {
-        Alert.alert('Error', error);
+      Alert.alert('Error', error);
     };
+    // if (drinks != null) {
+    //   Alert.alert(
+    //     "No drinks found",
+    //     "",
+    //     [{text: "Ok"}],
+    //     { cancelable: true }
+    //   )
+    // }
+    Keyboard.dismiss();
+    setName('');
   }
-
-  const findCocktailByIngredient = async () => {
+ 
+  const findByIngredient = async () => {
     const url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`;
-
     try {
-        const response = await fetch(url);
-        const data = await response.json();
+      const response = await fetch(url);
+      const data = await response.json();
+      setDrinks(data.drinks);
     } catch (error) {
-        Alert.alert('Error', error);
+      Alert.alert('Error', error);
     };
+    Keyboard.dismiss();
+    setIngredient('');
   }
 
     return (
       <View style={styles.container}>
         <FlatList
+         style={{padding: 0, width:"100%"}}
+          ListEmptyComponent={<Text style={{alignItems: 'center',}}>Start your search by searching by name or ingredient.</Text>} 
+          data={drinks}
+          keyExtractor={(item,index) => index.toString()}  
+          renderItem={({ item }) => (
+            <ListItem
+              bottomDivider
+              onPress={() => navigation.navigate('DrinkOfSearch', { item })}
+            >
+              <ListItem.Content>
+                <ListItem.Title style={styles.title}>{item.strDrink}</ListItem.Title>
+                <View>
+                  <Image source={{ uri: item.strDrinkThumb}} style={styles.image}/>
+                </View>
+              </ListItem.Content>
+              <Text style={{color: 'grey'}}>See details</Text>
+              <ListItem.Chevron />
+            </ListItem>)
+          }  
         />
         <View style={styles.search}>
           <TextInput 
             style={styles.input} 
             placeholder='name'
-            onChangeText={text => setCocktail(text)} 
+            onChangeText={text => setName(text)} 
+            value={name}
           />
           <Button 
             buttonStyle={{ width: 150, backgroundColor: '#265F54' }}
             title="Find by name"
-            onPress={findCocktailByName} 
+            onPress={findByName} 
           />
         </View>
         <View style={styles.search}>
           <TextInput
             style={styles.input} 
             placeholder='ingredient'
-            onChangeText={text => setIngredient(text)} 
+            onChangeText={text => setIngredient(text)}
+            value={ingredient} 
           />
           <Button 
             buttonStyle={{ width: 150, backgroundColor: '#265F54' }}
             title="Find by ingredient" 
-            onPress={findCocktailByIngredient} 
+            onPress={findByIngredient} 
           />
         </View>
         <StatusBar style="auto" />
@@ -78,5 +111,13 @@ const styles = StyleSheet.create({
     input: {
       fontSize:18, 
       width:200
-    }
-});
+    },
+    title: {
+      fontSize: 18, 
+      fontWeight: "bold",
+    },
+    image: {
+      width: 66,
+      height: 58,
+    },
+  });

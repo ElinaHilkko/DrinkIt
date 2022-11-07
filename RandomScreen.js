@@ -9,15 +9,17 @@ export default function RandomScreen() {
   const [ingredients, setIngredients] = useState([]);
   const [instruction, setInstruction] = useState('');
 
+  useEffect(() => {
+    getCocktail();
+  }, []);
+
   const getCocktail = async () => {
 
     ingredients.splice(0);
-    // setIngredients([]); EI TOIMI TÄLLÄ
     
     const url = `https://www.thecocktaildb.com/api/json/v1/1/random.php`;
 
     try {
-
         const response = await fetch(url);
         const data = await response.json();
 
@@ -31,17 +33,13 @@ export default function RandomScreen() {
           let y = "strMeasure" + (i+1).toString();
 
           if (data.drinks[0][x] != null) {
-            let newStateArray = ingredients;
             newStateArray.push({ingredient: data.drinks[0][x], amount: data.drinks[0][y]});
-            setIngredients(ingredients, newStateArray);
           }
           else {
             break;
           }
         };
-        
-        setIngredients(ingredients, newStateArray);
-
+        setIngredients(newStateArray);
     } catch (error) {
        Alert.alert('Error', error);
       console.log(error)

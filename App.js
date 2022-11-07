@@ -47,7 +47,7 @@ export default function App() {
           name='Own' 
           component={OwnScreen} 
           options={{ 
-            title: 'Own drinks',
+            title: 'Own Drinks',
             headerStyle: { backgroundColor: '#6D9E95' },
             headerTintColor: '#fff'
           }} 
@@ -56,7 +56,7 @@ export default function App() {
           name='DrinkOfSearch' 
           component={DrinkOfSearchScreen} 
           options={{ 
-            title: 'Details of drink',
+            title: 'Details of Drink',
             headerStyle: { backgroundColor: '#6D9E95' },
             headerTintColor: '#fff'
           }} 
@@ -65,7 +65,7 @@ export default function App() {
           name='DrinkOfOwn' 
           component={DrinkOfOwnScreen} 
           options={{ 
-            title: 'Details of own drink',
+            title: 'Details of Own Drink',
             headerStyle: { backgroundColor: '#6D9E95' },
             headerTintColor: '#fff'
           }} 
