@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Alert, FlatList, StyleSheet, Text, View, Keyboard, TextInput } from 'react-native';
+import { Alert, FlatList, Image, StyleSheet, Text, View, Keyboard, TextInput } from 'react-native';
 import { Button, Input, ListItem } from'react-native-elements';
 import * as SQLite from'expo-sqlite';
+import * as ImagePicker from 'expo-image-picker';
 
 const db = SQLite.openDatabase('drinksdb.db');
 
@@ -11,25 +12,32 @@ export default function OwnScreen({ navigation }) {
   const [ingredient, setIngredient] = useState(''); //TAULUKOKSI
   const [instruction, setInstruction] = useState('');
   const [drinks, setDrinks] = useState([]);
-  //KUVA
+  const [image, setImage] = useState(null);
+  const [imageBase64, setImageBase64] = useState(null);
 
-  useEffect(() => {  
+  useEffect(() => {
+    //dropTable();  
     db.transaction(tx => {    
-      tx.executeSql('create table if not exists drinklist(id integer primary key not null, name text, ingredient text, instruction text);');  
+      tx.executeSql('create table if not exists drinklist(id integer primary key not null, name text, ingredient text, instruction text, imageBase64 text);');  
     }, null, updateList);
   }, []);
 
   const saveItem = () => {  
     db.transaction(tx => {    
-      tx.executeSql('insert into drinklist (name, ingredient, instruction) values (?, ?, ?);',  
-        [name, ingredient, instruction]);    
+      tx.executeSql('insert into drinklist (name, ingredient, instruction, imageBase64) values (?, ?, ?, ?);',  
+        [name, ingredient, instruction, imageBase64]);    
     }, null, updateList)
     setName('');
     setIngredient(''); 
     setInstruction('');
-    //KUVA
+    setImage(null);
   }
 
+  const dropTable = () =>{
+    db.transaction(tx => {    
+      tx.executeSql('drop table drinklist;',);    
+    }, null, updateList)
+  }
 
   const updateList = () => {  
     db.transaction(tx => {    
@@ -61,6 +69,22 @@ export default function OwnScreen({ navigation }) {
     )
   }
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      base64: true,
+      allowsEditing: true,
+      aspect: [3, 3],
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+      setImageBase64(result.base64);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -82,6 +106,13 @@ export default function OwnScreen({ navigation }) {
         value={instruction}
       />
       <Button
+        raised icon={{name: 'image', color: 'white'}}
+        title='Pick an image from camera roll' onPress={pickImage}
+        buttonStyle={{backgroundColor: '#A7A6A6' }}
+      />
+      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      <Text></Text>
+      <Button
         raised icon={{name: 'add', color: 'white'}}
         buttonStyle={{ width: 130, backgroundColor: '#265F54' }}
         title="Add drink"
@@ -100,9 +131,9 @@ export default function OwnScreen({ navigation }) {
           >
             <ListItem.Content>
               <ListItem.Title style={styles.title}>{item.name}</ListItem.Title>
-              {/* <View>
-                <Image source={{ uri: item.strDrinkThumb}} style={styles.image}/>
-              </View> */}
+              <View>
+                <Image source={{ uri: `data:image/jpg;base64,${item.imageBase64}`}} style={styles.image}/>
+              </View>
             </ListItem.Content>
             <Text style={{color: 'grey'}}>See details</Text>
             <ListItem.Chevron />
