@@ -4,7 +4,7 @@ import { Alert, FlatList, Image, StyleSheet, Text, TextInput, View, Keyboard } f
 import { Button, ListItem } from'react-native-elements';
 
 export default function SearchScreen({ navigation }) {
-  const [name, setName] = useState(); 
+  const [name, setName] = useState(''); 
   const [ingredient, setIngredient] = useState('');
   const [drinks, setDrinks] = useState([]);
 
@@ -45,7 +45,7 @@ export default function SearchScreen({ navigation }) {
     return (
       <View style={styles.container}>
         <FlatList
-         style={{padding: 0, width:"100%"}}
+          style={{padding: 0, width:"100%"}}
           ListEmptyComponent={<Text style={{alignItems: 'center',}}>Start your search by searching by name or ingredient.</Text>} 
           data={drinks}
           keyExtractor={(item,index) => index.toString()}  
