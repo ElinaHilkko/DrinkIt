@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Alert, FlatList, Image, StyleSheet, Text, TextInput, View, Keyboard } from 'react-native';
 import { Button, ListItem } from'react-native-elements';
 
@@ -17,14 +17,6 @@ export default function SearchScreen({ navigation }) {
     } catch (error) {
       Alert.alert('Error', error);
     };
-    // if (drinks != null) {
-    //   Alert.alert(
-    //     "No drinks found",
-    //     "",
-    //     [{text: "Ok"}],
-    //     { cancelable: true }
-    //   )
-    // }
     Keyboard.dismiss();
     setName('');
   }
@@ -46,7 +38,7 @@ export default function SearchScreen({ navigation }) {
       <View style={styles.container}>
         <FlatList
           style={{padding: 0, width:"100%"}}
-          ListEmptyComponent={<Text style={{alignItems: 'center',}}>Start your search by searching by name or ingredient.</Text>} 
+          ListEmptyComponent={<Text style={{ fontSize: 18}}>Start your search by searching by name or ingredient.</Text>} 
           data={drinks}
           keyExtractor={(item,index) => index.toString()}  
           renderItem={({ item }) => (
@@ -102,7 +94,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingBottom: 3
+        paddingTop: 5,
+        paddingBottom: 5
     },
     search: {
       flexDirection: 'row',

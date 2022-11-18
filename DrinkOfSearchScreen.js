@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { Alert, FlatList, Image, StyleSheet, Text, View } from 'react-native';
-import { Button, Input, ListItem } from'react-native-elements';
 
 export default function DrinkOfSearchScreen({ route }) {
   const { item } = route.params;
@@ -66,6 +65,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        paddingTop: 30,
+        paddingBottom: 100
     },
     title: {
       fontSize: 18, 
@@ -74,11 +75,10 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 14,
       textAlignments: 'center',
-      textAlignmentsVertical: 'top'
     },
     image: {
-      width: 166,
-      height: 158,
+      width: 180,
+      height: 230,
       margin: 20
     },
     list: {

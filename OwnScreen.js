@@ -17,15 +17,20 @@ export default function OwnScreen({ navigation }) {
   const [imageBase64, setImageBase64] = useState(null);
 
   useEffect(() => {
-    //dropTable();  
+    // dropTable();  USE IF NEED TO INITIALIZE
     db.transaction(tx => {    
       tx.executeSql('create table if not exists drinklist(id integer primary key not null, name text, ingredient text, instruction text, imageBase64 text);');  
     }, null, updateList);
   }, []);
 
+  // const dropTable = () =>{
+  //   db.transaction(tx => {    
+  //     tx.executeSql('drop table drinklist;',);    
+  //   }, null, updateList)
+  // }
+
   const saveItem = () => {
     const ingredient = changeListToString();
-    console.log(ingredient)
     db.transaction(tx => {    
       tx.executeSql('insert into drinklist (name, ingredient, instruction, imageBase64) values (?, ?, ?, ?);',  
         [name, ingredient, instruction, imageBase64]);    
@@ -43,12 +48,6 @@ export default function OwnScreen({ navigation }) {
     }
     return x.substring(0, (x.length-1));
   }
-
-  // const dropTable = () =>{
-  //   db.transaction(tx => {    
-  //     tx.executeSql('drop table drinklist;',);    
-  //   }, null, updateList)
-  // }
 
   const updateList = () => {  
     db.transaction(tx => {    
@@ -140,7 +139,7 @@ export default function OwnScreen({ navigation }) {
       />
       <FlatList
         style={{padding: 0, width:"100%"}}
-        ListEmptyComponent={<Text style={{alignItems: 'center',}}>Start adding a drink.</Text>}
+        ListEmptyComponent={<Text style={{alignItems: 'center', fontSize: 18}}>Start adding a drink.</Text>}
         data={drinks}
         keyExtractor={(item,index) => index.toString()}  
         renderItem={({ item }) => (

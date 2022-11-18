@@ -5,9 +5,17 @@ import { Button, Input, ListItem } from'react-native-elements';
 
 export default function DrinkOfOwnScreen({ route }) {
   const { item } = route.params;
-  const { ingredients, setIngredients } = useState([]);
+  const [ingredients, setIngredients] = useState([]);
 
-  //SPLIT AINEKSET
+  useEffect(() => {
+    setIngredients(getIngredients());
+  }, []);
+
+  const getIngredients = () => {
+    let x = [];
+    x = item.ingredient.split(';');
+    return x;   
+  }
 
     return (
       <View style={styles.container}>
@@ -16,7 +24,11 @@ export default function DrinkOfOwnScreen({ route }) {
           source={{ uri: `data:image/jpg;base64,${item.imageBase64}`}} 
         />
         <Text style={styles.title}>{item.name}</Text>
-        <Text style={styles.text}>{item.ingredient}</Text>
+        <FlatList style={styles.list}
+          data={ingredients}
+          renderItem={({item}) => <Text>{item}</Text>}  
+          keyExtractor={(item, index) => index.toString()}
+        />
         <Text style={styles.text}>{item.instruction}</Text>
         <StatusBar style="auto" />
       </View>
@@ -29,6 +41,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        paddingTop: 30,
+        paddingBottom: 100
     },
     title: {
       fontSize: 18, 
@@ -37,11 +51,10 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 14,
       textAlignments: 'center',
-      textAlignmentsVertical: 'top'
     },
     image: {
-      width: 166,
-      height: 158,
+      width: 180,
+      height: 230,
       margin: 20
     },
     list: {
