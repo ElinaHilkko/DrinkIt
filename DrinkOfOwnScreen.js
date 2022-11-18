@@ -1,13 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Alert, FlatList, StyleSheet, Text, View, Keyboard } from 'react-native';
+import { Alert, FlatList, Image, StyleSheet, Text, View, Keyboard } from 'react-native';
 import { Button, Input, ListItem } from'react-native-elements';
 
 export default function DrinkOfOwnScreen({ route }) {
-  //const { item } = route.params;
+  const { item } = route.params;
+  const { ingredients, setIngredients } = useState([]);
+
+  //SPLIT AINEKSET
+
     return (
       <View style={styles.container}>
-        <Text>This is a first app. Let's continue!</Text>
+        <Image
+          style={styles.image}
+          source={{ uri: `data:image/jpg;base64,${item.imageBase64}`}} 
+        />
+        <Text style={styles.title}>{item.name}</Text>
+        <Text style={styles.text}>{item.ingredient}</Text>
+        <Text style={styles.text}>{item.instruction}</Text>
         <StatusBar style="auto" />
       </View>
     );

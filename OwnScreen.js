@@ -9,7 +9,8 @@ const db = SQLite.openDatabase('drinksdb.db');
 
 export default function OwnScreen({ navigation }) {
   const [name, setName] = useState(''); 
-  const [ingredient, setIngredient] = useState(''); //TAULUKOKSI
+  const [tempIngredient, setTempIngredient] = useState('');
+  const [ingredients, setIngredients] = useState([]);
   const [instruction, setInstruction] = useState('');
   const [drinks, setDrinks] = useState([]);
   const [image, setImage] = useState(null);
@@ -22,22 +23,32 @@ export default function OwnScreen({ navigation }) {
     }, null, updateList);
   }, []);
 
-  const saveItem = () => {  
+  const saveItem = () => {
+    const ingredient = changeListToString();
+    console.log(ingredient)
     db.transaction(tx => {    
       tx.executeSql('insert into drinklist (name, ingredient, instruction, imageBase64) values (?, ?, ?, ?);',  
         [name, ingredient, instruction, imageBase64]);    
     }, null, updateList)
     setName('');
-    setIngredient(''); 
+    setIngredients([]); 
     setInstruction('');
     setImage(null);
   }
 
-  const dropTable = () =>{
-    db.transaction(tx => {    
-      tx.executeSql('drop table drinklist;',);    
-    }, null, updateList)
+  const changeListToString = () => {
+    let x = ""; 
+    for (let i = 0; i < ingredients.length; i++) {
+      x = x + ingredients[i] + ';';
+    }
+    return x.substring(0, (x.length-1));
   }
+
+  // const dropTable = () =>{
+  //   db.transaction(tx => {    
+  //     tx.executeSql('drop table drinklist;',);    
+  //   }, null, updateList)
+  // }
 
   const updateList = () => {  
     db.transaction(tx => {    
@@ -46,7 +57,6 @@ export default function OwnScreen({ navigation }) {
       );   
     }, null, null);
     Keyboard.dismiss(); 
-    console.log(drinks) 
   }
 
   const deleteItem = (id) => {  
@@ -69,6 +79,11 @@ export default function OwnScreen({ navigation }) {
     )
   }
 
+  const addIngredientList = () => {
+    setIngredients([...ingredients, tempIngredient]);
+    setTempIngredient('');
+  }
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -76,9 +91,6 @@ export default function OwnScreen({ navigation }) {
       allowsEditing: true,
       aspect: [3, 3],
     });
-
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
       setImageBase64(result.base64);
@@ -93,12 +105,20 @@ export default function OwnScreen({ navigation }) {
         onChangeText={text => setName(text)}
         value={name}
       />
-      <TextInput
-        style={styles.input} 
-        placeholder='ingredient'
-        onChangeText={text => setIngredient(text)}
-        value={ingredient}
-      />
+      <View style={styles.addIngredient}>
+        <TextInput
+          style={styles.inputIngredient} 
+          placeholder='ingredient'
+          onChangeText={text => setTempIngredient(text)}
+          value={tempIngredient}
+        />
+        <Button
+          raised icon={{name: 'list', color: 'white'}}
+          title='Add'  
+          onPress={addIngredientList}
+          buttonStyle={{backgroundColor: '#A7A6A6' }}
+        />
+      </View>
       <TextInput
         style={styles.input} 
         placeholder='instruction'
@@ -132,7 +152,10 @@ export default function OwnScreen({ navigation }) {
             <ListItem.Content>
               <ListItem.Title style={styles.title}>{item.name}</ListItem.Title>
               <View>
-                <Image source={{ uri: `data:image/jpg;base64,${item.imageBase64}`}} style={styles.image}/>
+                <Image
+                  style={styles.image}
+                  source={{ uri: `data:image/jpg;base64,${item.imageBase64}`}} 
+                />
               </View>
             </ListItem.Content>
             <Text style={{color: 'grey'}}>See details</Text>
@@ -153,13 +176,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingBottom: 3
     },
-    search: {
+    addIngredient: {
       flexDirection: 'row',
       margin: 2
     },
     input: {
       fontSize:18, 
       width:200
+    },
+    inputIngredient: {
+      fontSize: 18, 
+      width: 120
     },
     title: {
       fontSize: 18, 
