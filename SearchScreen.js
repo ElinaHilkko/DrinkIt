@@ -4,12 +4,11 @@ import { Alert, FlatList, Image, StyleSheet, Text, TextInput, View, Keyboard } f
 import { Button, ListItem } from'react-native-elements';
 
 export default function SearchScreen({ navigation }) {
-  const [name, setName] = useState(''); 
-  const [ingredient, setIngredient] = useState('');
+  const [text, setText] = useState(''); 
   const [drinks, setDrinks] = useState([]);
 
   const findByName = async () => {
-    const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`;
+    const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${text}`;
     try {
       const response = await fetch(url);
       const data = await response.json();
@@ -18,11 +17,11 @@ export default function SearchScreen({ navigation }) {
       Alert.alert('Error', error);
     };
     Keyboard.dismiss();
-    setName('');
+    setText('');
   }
  
   const findByIngredient = async () => {
-    const url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`;
+    const url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${text}`;
     try {
       const response = await fetch(url);
       const data = await response.json();
@@ -31,7 +30,7 @@ export default function SearchScreen({ navigation }) {
       Alert.alert('Error', error);
     };
     Keyboard.dismiss();
-    setIngredient('');
+    setText('');
   }
 
     return (
@@ -60,25 +59,23 @@ export default function SearchScreen({ navigation }) {
         <View style={styles.search}>
           <TextInput 
             style={styles.input} 
-            placeholder='name'
-            onChangeText={text => setName(text)} 
-            value={name}
+            placeholder='write name or ingredient'
+            onChangeText={text => setText(text)} 
+            value={text}
           />
-          <Button 
-            buttonStyle={{ width: 150, backgroundColor: '#265F54' }}
+
+        </View>
+        <View style={styles.search}>
+          <Button
+            raised icon={{name: 'search', color: 'white'}} 
+            buttonStyle={{ width: 140, backgroundColor: '#265F54' }}
             title="Find by name"
             onPress={findByName} 
           />
-        </View>
-        <View style={styles.search}>
-          <TextInput
-            style={styles.input} 
-            placeholder='ingredient'
-            onChangeText={text => setIngredient(text)}
-            value={ingredient} 
-          />
-          <Button 
-            buttonStyle={{ width: 150, backgroundColor: '#265F54' }}
+          <Text>    </Text>
+          <Button
+            raised icon={{name: 'search', color: 'white'}} 
+            buttonStyle={{ width: 180, backgroundColor: '#265F54' }}
             title="Find by ingredient" 
             onPress={findByIngredient} 
           />
@@ -103,7 +100,7 @@ const styles = StyleSheet.create({
     },
     input: {
       fontSize:18, 
-      width:200
+      width:'90%'
     },
     title: {
       fontSize: 18, 

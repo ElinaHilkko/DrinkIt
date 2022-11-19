@@ -20,7 +20,7 @@ export default function App() {
           name='Home' 
           component={HomeScreen} 
           options={{ 
-            title: 'My home',
+            title: 'My Home',
             headerStyle: { backgroundColor: '#6D9E95' },
             headerTintColor: '#fff'
           }} 

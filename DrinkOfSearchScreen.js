@@ -5,7 +5,7 @@ import { Alert, FlatList, Image, StyleSheet, Text, View } from 'react-native';
 export default function DrinkOfSearchScreen({ route }) {
   const { item } = route.params;
   const [name, setName] = useState('');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(null);
   const [ingredients, setIngredients] = useState([]);
   const [instruction, setInstruction] = useState('');
 
