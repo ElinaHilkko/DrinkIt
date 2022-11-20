@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { Alert, FlatList, Image, StyleSheet, Text, View, Keyboard } from 'react-native';
-import { Button, Input, ListItem } from'react-native-elements';
+import { Alert, FlatList, Image, StyleSheet, Text, View } from 'react-native';
 
 export default function DrinkOfOwnScreen({ route }) {
   const { item } = route.params;

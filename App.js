@@ -2,13 +2,13 @@ import { NavigationContainer} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as LocalAuthentication from 'expo-local-authentication';
 
-import HomeScreen from './HomeScreen';
-import SearchScreen from './SearchScreen';
-import RandomScreen from './RandomScreen';
-import OwnScreen from './OwnScreen';
-import DrinkOfSearchScreen from './DrinkOfSearchScreen';
-import DrinkOfOwnScreen from './DrinkOfOwnScreen';
-import LoginScreen from './LoginScreen';
+import HomeScreen from './screens/HomeScreen';
+import SearchScreen from './screens/SearchScreen';
+import RandomScreen from './screens/RandomScreen';
+import OwnScreen from './screens/OwnScreen';
+import DrinkOfSearchScreen from './screens/DrinkOfSearchScreen';
+import DrinkOfOwnScreen from './screens/DrinkOfOwnScreen';
+import LoginScreen from './screens/LoginScreen';
 import { useEffect, useState } from 'react';
 
 const Stack = createNativeStackNavigator();

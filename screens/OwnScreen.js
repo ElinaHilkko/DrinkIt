@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { Alert, FlatList, Image, StyleSheet, Text, View, Keyboard, TextInput } from 'react-native';
-import { Button, Input, ListItem } from'react-native-elements';
+import { Button, ListItem } from'react-native-elements';
 import * as SQLite from'expo-sqlite';
 import * as ImagePicker from 'expo-image-picker';
 
