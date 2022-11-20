@@ -129,7 +129,7 @@ export default function OwnScreen({ navigation }) {
         title='Pick an image from camera roll' onPress={pickImage}
         buttonStyle={{backgroundColor: '#A7A6A6' }}
       />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      {image && <Image source={{ uri: image }} style={styles.imagePicker} />}
       <Text></Text>
       <Button
         raised icon={{name: 'add', color: 'white'}}
@@ -138,8 +138,8 @@ export default function OwnScreen({ navigation }) {
         onPress={saveItem} 
       />
       <FlatList
-        style={{padding: 0, width:"100%"}}
-        ListEmptyComponent={<Text style={{alignItems: 'center', fontSize: 18}}>Start adding a drink.</Text>}
+        style={styles.list}
+        ListEmptyComponent={<Text style={styles.emptyList}>Start adding a drink.</Text>}
         data={drinks}
         keyExtractor={(item,index) => index.toString()}  
         renderItem={({ item }) => (
@@ -187,6 +187,11 @@ const styles = StyleSheet.create({
       fontSize: 18, 
       width: 120
     },
+    imagePicker: {
+      width: 200, 
+      height: 200, 
+      margin: 5
+    },
     title: {
       fontSize: 18, 
       fontWeight: "bold",
@@ -195,4 +200,12 @@ const styles = StyleSheet.create({
       width: 66,
       height: 58,
     },
+    list: {
+      padding: 0, 
+      width:"100%", 
+    },
+    emptyList: {
+      alignItems: 'center', 
+      fontSize: 18
+    }
 });

@@ -35,9 +35,30 @@ export default function SearchScreen({ navigation }) {
 
     return (
       <View style={styles.container}>
+        <TextInput 
+          style={styles.input} 
+          placeholder='write name or ingredient'
+          onChangeText={text => setText(text)} 
+          value={text}
+        />
+        <View style={styles.search}>
+          <Button
+            raised icon={{name: 'search', color: 'white'}} 
+            buttonStyle={{ width: 140, backgroundColor: '#265F54' }}
+            title="Find by name"
+            onPress={findByName} 
+          />
+          <Text>    </Text>
+          <Button
+            raised icon={{name: 'search', color: 'white'}} 
+            buttonStyle={{ width: 180, backgroundColor: '#265F54' }}
+            title="Find by ingredient" 
+            onPress={findByIngredient} 
+          />
+        </View>
         <FlatList
-          style={{padding: 0, width:"100%"}}
-          ListEmptyComponent={<Text style={{ fontSize: 18}}>Start your search by searching by name or ingredient.</Text>} 
+          style={styles.list}
+          ListEmptyComponent={<Text style={styles.emptyList}>Start your search by searching by name or ingredient.</Text>} 
           data={drinks}
           keyExtractor={(item,index) => index.toString()}  
           renderItem={({ item }) => (
@@ -56,30 +77,6 @@ export default function SearchScreen({ navigation }) {
             </ListItem>)
           }  
         />
-        <View style={styles.search}>
-          <TextInput 
-            style={styles.input} 
-            placeholder='write name or ingredient'
-            onChangeText={text => setText(text)} 
-            value={text}
-          />
-
-        </View>
-        <View style={styles.search}>
-          <Button
-            raised icon={{name: 'search', color: 'white'}} 
-            buttonStyle={{ width: 140, backgroundColor: '#265F54' }}
-            title="Find by name"
-            onPress={findByName} 
-          />
-          <Text>    </Text>
-          <Button
-            raised icon={{name: 'search', color: 'white'}} 
-            buttonStyle={{ width: 180, backgroundColor: '#265F54' }}
-            title="Find by ingredient" 
-            onPress={findByIngredient} 
-          />
-        </View>
         <StatusBar style="auto" />
       </View>
     );
@@ -91,16 +88,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingTop: 5,
         paddingBottom: 5
     },
     search: {
       flexDirection: 'row',
-      margin: 2
     },
     input: {
       fontSize:18, 
-      width:'90%'
+      width:'90%',
+      margin: 10
     },
     title: {
       fontSize: 18, 
@@ -110,4 +106,13 @@ const styles = StyleSheet.create({
       width: 66,
       height: 58,
     },
+    list: {
+      padding: 0, 
+      width:"100%", 
+      margin: 10
+    },
+    emptyList: {
+      alignItems: 'center', 
+      fontSize: 18
+    }
   });
